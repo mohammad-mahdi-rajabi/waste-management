@@ -11,13 +11,13 @@ dotenv_file = os.path.join(BASE_DIR, ".env")
 if os.path.isfile(dotenv_file):
     dotenv.load_dotenv(dotenv_file)
 
-
+SECRET_KEY= "eadbd2a39f77603af42f1926e399c92fdbcc389c90aa0fa0e0b8914ef734e1a6"
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
 #ALLOWED_HOSTS = ['api.syban.com']
-ALLOWED_HOSTS = ['www.earthlytix.com']
+ALLOWED_HOSTS = ['*']
 
 # Application definition
 
@@ -33,6 +33,7 @@ INSTALLED_APPS = [
     'rest_framework_simplejwt',
     'rest_framework_simplejwt.token_blacklist',
     'waste_management',
+    'drf_spectacular',
 
 ]
 
@@ -150,4 +151,9 @@ DEFAULT_FILE_STORAGE = 'django.core.files.storage.FileSystemStorage'
 STATIC_ROOT = '/home/SybanCloud/SybanCloudV1/static'
 STATIC_URL = '/static/'
 
-
+REST_FRAMEWORK = {
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
+}
+SPECTACULAR_SETTINGS={
+    'TITLE': 'WM DRF'
+}

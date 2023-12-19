@@ -1,17 +1,20 @@
 from dateutil.relativedelta import relativedelta
 from datetime import datetime
 
-from .models import HSEAccidentReport #, WasteBatchAcceptanceAtOrigin, WasteBatchAcceptanceAtDestination, WasteBatchStorageEnter
-#from .models import WasteBatchStorageExit, WasteBatchTreatment, WasteBatchLandfilling, Contract, Payment
+from .models import \
+    HSEAccidentReport  # , WasteBatchAcceptanceAtOrigin, WasteBatchAcceptanceAtDestination, WasteBatchStorageEnter
+# from .models import WasteBatchStorageExit, WasteBatchTreatment, WasteBatchLandfilling, Contract, Payment
 
-from django.db.models import Count #, Sum
+from django.db.models import Count  # , Sum
 import plotly.graph_objects as go
 from django.shortcuts import render
-#from django.db.models.functions import Coalesce
-#from django.db.models import Q
+# from django.db.models.functions import Coalesce
+# from django.db.models import Q
 # from django.http import HttpResponse
 import json
 import plotly
+
+
 # &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& HSE dashboard &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
 
 # Quary database
@@ -81,23 +84,24 @@ def accident_report_data_stacked_bar_chart(data_array, x_axis_title, y_axis_titl
     fig.add_trace(go.Bar(x=dates, y=values_severity_5, name=legend_titles[4]))
 
     fig.update_layout(
-        barmode='stack',                 # Stacking the bars
+        barmode='stack',  # Stacking the bars
         xaxis=dict(title=x_axis_title),  # Set x-axis title
         yaxis=dict(title=y_axis_title),  # Set y-axis title
-        showlegend=True,                 # Show legend
-        legend=dict(title="Legend")      # Set legend title
+        showlegend=True,  # Show legend
+        legend=dict(title="Legend")  # Set legend title
     )
 
     return fig
+
 
 # Sample function call: png_image = accident_report_data_stacked_bar_chart(data_array, x_axis_title, y_axis_title, legend_titles)
 
 def total_accidents_by_type_pie_chart(variable_names, variable_values):
     # Creating a pie chart using Plotly with percentages and a legend
     fig = go.Figure(data=[go.Pie(labels=variable_names,
-                                  values=variable_values,
-                                  textinfo='percent',
-                                  showlegend=True)])
+                                 values=variable_values,
+                                 textinfo='percent',
+                                 showlegend=True)])
 
     # Customize the layout
     fig.update_layout(title="Pie Chart")
@@ -105,8 +109,8 @@ def total_accidents_by_type_pie_chart(variable_names, variable_values):
     # Return the pie chart as a PNG image without writing it to storage
     return fig
 
-# Views
 
+# Views
 
 
 def accident_report(request):
@@ -127,7 +131,8 @@ def accident_report(request):
 
         # Generate the pie chart
         pie_chart_fig = total_accidents_by_type_pie_chart(
-            [entry['accident_type'] for entry in total_accidents_by_type],  # Assuming 'accident_type' is the correct key
+            [entry['accident_type'] for entry in total_accidents_by_type],
+            # Assuming 'accident_type' is the correct key
             [entry['total_accidents'] for entry in total_accidents_by_type]
         )
         pie_chart_json = json.dumps(pie_chart_fig, cls=plotly.utils.PlotlyJSONEncoder)
