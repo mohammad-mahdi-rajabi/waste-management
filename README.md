@@ -22,7 +22,7 @@ cd waste-management
 # run project with docker and docker-compose
 docker-compose up -d
 ```
-This command will build container image and run it on 8000 port. you can change the listening port in docker-compose file by changing the 8008 in ports section:
+This command will build container image and run it on 8080 port. you can change the listening port in docker-compose file by changing the 8008 in ports section:
 ```bash
 version: '3'
 
@@ -30,9 +30,9 @@ services:
 
   wst-mng:
     build: .
-#    command: gunicorn core.wsgi:application --bind 0.0.0.0:8000
+#    command: gunicorn core.wsgi:application --bind 0.0.0.0:8080
     expose:
-      - "8000"
+      - "8080"
     depends_on:
           - postgres
   postgres:
@@ -63,7 +63,7 @@ volumes:
 ## API documents are available in swagger:
 After running the app, open the following address in your browser:
 ```bash
-http://127.0.0.1:8000/api/schema/docs/
+http://127.0.0.1:8080/api/schema/docs/
 ```
 **Note:**
 
