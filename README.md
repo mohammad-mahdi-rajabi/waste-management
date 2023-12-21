@@ -22,7 +22,7 @@ cd waste-management
 # run project with docker and docker-compose
 docker-compose up -d
 ```
-This command will build container image and run it on 80000 port. you can change the listening port in docker-compose file by changing the 8008 in ports section:
+This command will build container image and run it on 8000 port. you can change the listening port in docker-compose file by changing the 8008 in ports section:
 ```bash
 version: '3'
 
