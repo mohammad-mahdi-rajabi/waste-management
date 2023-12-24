@@ -7,7 +7,6 @@ import uuid
 from django.utils import timezone
 import magic
 
-
 QUANTITY_UNIT_CHOICES = (
     ("Kg", "kg"),
 
@@ -23,12 +22,10 @@ DENSITY_UNIT_CHOICES = (
 
 )
 
-
 CONCENTRATION_UNIT_CHOICES = (
     ("mg/lit", "mg/lit"),
 
 )
-
 
 
 # &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& Reusable functions &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
@@ -60,8 +57,14 @@ def validate_image_file_content(file):
             _('Unsupported file type. Only JPEG, PNG, GIF, TIFF, EPS, and SVG images are allowed.')
         )
 
+
 def validate_document_file_content(file):
-    valid_mime_types = ['application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', 'application/vnd.ms-excel', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', 'application/vnd.ms-powerpoint', 'application/vnd.openxmlformats-officedocument.presentationml.presentation', 'application/zip', 'application/x-rar']
+    valid_mime_types = ['application/pdf', 'application/msword',
+                        'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+                        'application/vnd.ms-excel', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+                        'application/vnd.ms-powerpoint',
+                        'application/vnd.openxmlformats-officedocument.presentationml.presentation', 'application/zip',
+                        'application/x-rar']
     file_mime_type = magic.from_buffer(file.read(1024), mime=True)
     if file_mime_type not in valid_mime_types:
         raise ValidationError(
@@ -86,12 +89,14 @@ def validate_document_file_extension(file):
             _('File type not supported. Only PDF, Word, Excel, PowerPoint, and zip files are allowed.')
         )
 
+
 # &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& Upload Destinations &&&&&&&&&&&&&&&&&&&&&&&&&&&&&
 
 def earthlytix_uploads_path(instance, filename):
     ext = filename.split('.')[-1]
     random_name = "%s.%s" % (uuid.uuid4(), ext)
     return "SybanUploads/" + random_name
+
 
 def user_uploads_path(instance, filename):
     ext = filename.split('.')[-1]
@@ -153,6 +158,7 @@ class ClientStatus(models.Model):
     def __str__(self):
         return self.ref
 
+
 # *******
 class Language(models.Model):
     ref = models.CharField(primary_key=True, max_length=50)
@@ -169,6 +175,7 @@ class Calendar(models.Model):
     def __str__(self):
         return self.ref
 
+
 # &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& Client Data &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
 
 class Client(models.Model):
@@ -182,7 +189,9 @@ class Client(models.Model):
     location = models.ManyToManyField(Location)
     contact = models.ManyToManyField(Contact)
 
-    logo = models.ImageField(upload_to=user_uploads_path, validators=[validate_file_size, validate_image_file_extension, validate_image_file_content], blank=True, null=True)
+    logo = models.ImageField(upload_to=user_uploads_path, validators=[validate_file_size, validate_image_file_extension,
+                                                                      validate_image_file_content], blank=True,
+                             null=True)
 
     def __str__(self):
         return self.name
@@ -191,8 +200,12 @@ class Client(models.Model):
 class User(AbstractUser):
     client = models.ForeignKey(Client, null=True, blank=True, on_delete=models.CASCADE)
     phone_number = models.CharField(max_length=50, blank=True, null=True)
-    profile_image= models.ImageField(upload_to=user_uploads_path, validators=[validate_file_size, validate_image_file_extension, validate_image_file_content], blank=True, null=True)
-    signature_image = models.ImageField(upload_to=user_uploads_path, validators=[validate_file_size, validate_image_file_extension, validate_image_file_content], blank=True, null=True)
+    profile_image = models.ImageField(upload_to=user_uploads_path,
+                                      validators=[validate_file_size, validate_image_file_extension,
+                                                  validate_image_file_content], blank=True, null=True)
+    signature_image = models.ImageField(upload_to=user_uploads_path,
+                                        validators=[validate_file_size, validate_image_file_extension,
+                                                    validate_image_file_content], blank=True, null=True)
     selected_language = models.ForeignKey(Language, on_delete=models.SET_NULL, blank=True, null=True)
     selected_calender = models.ForeignKey(Calendar, on_delete=models.SET_NULL, blank=True, null=True)
     is_client_admin = models.BooleanField(default=False)
@@ -240,7 +253,6 @@ class ObjectBase(models.Model):
     approved_date_time = models.DateTimeField(null=True, blank=True)
     archieved_by_the_form_submitter = models.BooleanField(default=False)
     archieved_date_time = models.DateTimeField(null=True, blank=True)
-
 
     def __str__(self):
         return str(self.id_code)
@@ -297,20 +309,25 @@ class UserPosition(ObjectBase):
 class DocumentFile(models.Model):
     id_code = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     file_note = models.CharField(max_length=50)
-    document = models.FileField(upload_to=user_uploads_path, validators=[validate_file_size, validate_document_file_extension, validate_document_file_content])
+    document = models.FileField(upload_to=user_uploads_path,
+                                validators=[validate_file_size, validate_document_file_extension,
+                                            validate_document_file_content])
 
 
 class ImageFile(models.Model):
     id_code = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     image_note = models.CharField(max_length=50)
-    image = models.ImageField(upload_to=user_uploads_path, validators=[validate_file_size, validate_image_file_extension, validate_image_file_content])
+    image = models.ImageField(upload_to=user_uploads_path,
+                              validators=[validate_file_size, validate_image_file_extension,
+                                          validate_image_file_content])
 
 
 # &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& Form Templates &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
 class FormGroup(models.Model):
     ref = models.CharField(max_length=50, primary_key=True)
     name = models.JSONField(default=json_default)
-    logo = models.ImageField(upload_to=earthlytix_uploads_path, validators=[validate_file_size, validate_image_file_extension], blank=True, null=True)
+    logo = models.ImageField(upload_to=earthlytix_uploads_path,
+                             validators=[validate_file_size, validate_image_file_extension], blank=True, null=True)
 
     def __str__(self):
         return self.ref
@@ -359,7 +376,7 @@ class StaticChoiceOption(models.Model):
         return '{}'.format(self.static_option.ref)
 
 
-FIELD_TYPE_CHOICES =(
+FIELD_TYPE_CHOICES = (
     ("SMALL TEXT BOX", "small text box"),
     ("LARGE TEXT BOX", "large text box"),
     ("NUMERIC POSITIVE INTEGER", "numeric positive integer"),
@@ -377,6 +394,7 @@ FIELD_TYPE_CHOICES =(
     ("DOCUMENT", "document"),
 
 )
+
 
 class Field(models.Model):
     id_code = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
@@ -415,7 +433,8 @@ class ContentText(ContentBase):
 
 class ContentImage(ContentBase):
     image_caption = models.CharField(max_length=50, unique=True)
-    content_image = models.ImageField(upload_to=earthlytix_uploads_path, validators=[validate_file_size], blank=True, null=True)
+    content_image = models.ImageField(upload_to=earthlytix_uploads_path, validators=[validate_file_size], blank=True,
+                                      null=True)
 
 
 # &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& Contact us &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
@@ -444,7 +463,6 @@ class CalendarEvent(ObjectBase):
         return '{} - {} - {}'.format(self.user, self.date, self.title)
 
 
-
 # &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& Vehicles &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
 class VehicleType(models.Model):
     ref = models.CharField(primary_key=True, max_length=50)
@@ -464,7 +482,8 @@ class VehicleInfo(models.Model):
     is_the_label_attached = models.BooleanField()
     is_the_cargo_specifications_consistent_with_the_bill_of_lading = models.BooleanField()
     amount_of_waste_transported = models.FloatField()
-    unit_of_waste_quantity = models.CharField(max_length=50, choices=QUANTITY_UNIT_CHOICES, default=QUANTITY_UNIT_CHOICES[0][0])
+    unit_of_waste_quantity = models.CharField(max_length=50, choices=QUANTITY_UNIT_CHOICES,
+                                              default=QUANTITY_UNIT_CHOICES[0][0])
 
 
 # &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& Various Types &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
@@ -475,6 +494,7 @@ class AssociateType(models.Model):
     def __str__(self):
         return self.ref
 
+
 # *******
 class ContractType(models.Model):
     ref = models.CharField(primary_key=True, max_length=50)
@@ -482,6 +502,7 @@ class ContractType(models.Model):
 
     def __str__(self):
         return self.ref
+
 
 # *******
 class WasteStorageType(models.Model):
@@ -491,6 +512,7 @@ class WasteStorageType(models.Model):
 
     def __str__(self):
         return self.ref
+
 
 # *******
 class WasteAnalysisParameter(models.Model):
@@ -545,11 +567,13 @@ class WasteAnalysisMethod(models.Model):
     def __str__(self):
         return self.ref
 
+
 ###
 class LabAnalysisResult(ObjectBase):
     parameter = models.ForeignKey(WasteAnalysisParameter, on_delete=models.SET_NULL, blank=True, null=True)
     value = models.FloatField()
-    unit_of_concentration = models.CharField(max_length=50, choices=CONCENTRATION_UNIT_CHOICES, default=CONCENTRATION_UNIT_CHOICES[0][0])
+    unit_of_concentration = models.CharField(max_length=50, choices=CONCENTRATION_UNIT_CHOICES,
+                                             default=CONCENTRATION_UNIT_CHOICES[0][0])
     detection_limit = models.FloatField(blank=True, null=True)
     analysis_method = models.ForeignKey(WasteAnalysisMethod, on_delete=models.SET_NULL, blank=True, null=True)
     analysis_standard = models.ForeignKey(WasteAnalysisStandard, on_delete=models.SET_NULL, blank=True, null=True)
@@ -585,6 +609,7 @@ class WasteTreatmentMethod(models.Model):
     def __str__(self):
         return self.ref
 
+
 # &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& Customers, contracts and payments &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
 class AssociateOfClient(ObjectBase):
     client = models.ForeignKey(Client, on_delete=models.SET_NULL, blank=True, null=True)
@@ -602,7 +627,8 @@ class AssociateOfClient(ObjectBase):
 class Contract(ObjectBase):
     associate = models.ForeignKey(AssociateOfClient, null=True, blank=True, on_delete=models.SET_NULL)
     type_of_contract = models.ForeignKey(ContractType, null=True, blank=True, on_delete=models.CASCADE)
-    reference_code = models.CharField(unique=True, default=generate_unique_ids('Contract-', 6), editable=False, max_length=50)
+    reference_code = models.CharField(unique=True, default=generate_unique_ids('Contract-', 6), editable=False,
+                                      max_length=50)
     title = models.CharField(max_length=50)
     duration_in_days = models.IntegerField(blank=True, null=True)
     date_of_signing = models.DateField()
@@ -717,8 +743,10 @@ class WasteExpressedCharacteristic(ObjectBase):
 class WasteBatch(ObjectBase):
     customer = models.ForeignKey(AssociateOfClient, null=True, blank=True, on_delete=models.SET_NULL)
     contract = models.ForeignKey(Contract, null=True, blank=True, on_delete=models.SET_NULL)
-    assigned_waste_reference_code = models.CharField(unique=True, default=generate_unique_ids('WB-', 12), editable=False, max_length=50)
-    related_WasteExpressedCharacteristic = models.ForeignKey(WasteExpressedCharacteristic, null=True, blank=True, on_delete=models.SET_NULL)
+    assigned_waste_reference_code = models.CharField(unique=True, default=generate_unique_ids('WB-', 12),
+                                                     editable=False, max_length=50)
+    related_WasteExpressedCharacteristic = models.ForeignKey(WasteExpressedCharacteristic, null=True, blank=True,
+                                                             on_delete=models.SET_NULL)
 
     waste_class = models.ForeignKey(WasteClass, null=True, blank=True, on_delete=models.SET_NULL)
 
@@ -735,7 +763,8 @@ class WasteSubBatch(ObjectBase):
     description = models.TextField(null=True, blank=True)
     quantity = models.FloatField()
     quantity_unit = models.CharField(max_length=50, choices=QUANTITY_UNIT_CHOICES, default=QUANTITY_UNIT_CHOICES[0][0])
-    assigned_waste_reference_code = models.CharField(unique=True, default=generate_unique_ids('SUB-', 8), editable=False, max_length=50)
+    assigned_waste_reference_code = models.CharField(unique=True, default=generate_unique_ids('SUB-', 8),
+                                                     editable=False, max_length=50)
 
 
 # &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& Waste Initial and Secondary Evaluation &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
@@ -792,7 +821,8 @@ class WasteAssessment(ObjectBase):
     other_requirements = models.TextField(null=True, blank=True)
     images = models.ForeignKey(ImageFile, null=True, blank=True, on_delete=models.SET_NULL)
 
-    related_miscellaneous_documents = models.ForeignKey(DocumentFile, null=True, blank=True, on_delete=models.SET_NULL,)
+    related_miscellaneous_documents = models.ForeignKey(DocumentFile, null=True, blank=True,
+                                                        on_delete=models.SET_NULL, )
 
     number_of_samples = models.IntegerField(null=True, blank=True)
     comments = models.TextField(blank=True, null=True)
@@ -809,7 +839,6 @@ class WasteSample(ObjectBase):
 
 
 # &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& Waste Cost offer &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
-
 
 
 class WasteBatchCostManHour(models.Model):
@@ -842,13 +871,12 @@ class WasteBatchCostEstimation(ObjectBase):
     currency = models.CharField(max_length=50, choices=CURRENCY_UNIT_CHOICES, default=CURRENCY_UNIT_CHOICES[0][0])
     man_hours = models.ManyToManyField(WasteBatchCostManHour, blank=True)
     equipments = models.ManyToManyField(WasteBatchCostEquipment, blank=True)
-    materials= models.ManyToManyField(WasteBatchCostMaterial, blank=True)
+    materials = models.ManyToManyField(WasteBatchCostMaterial, blank=True)
     total_cost = models.FloatField()
     comments = models.TextField(blank=True, null=True)
-    waste_overhead_coefficient =  models.FloatField(default=0.25)
+    waste_overhead_coefficient = models.FloatField(default=0.25)
     company_overhead_coefficient = models.FloatField(default=0.25)
     total_offer = models.FloatField()
-
 
 
 class WasteAssociatedWithContract(ObjectBase):
@@ -858,7 +886,7 @@ class WasteAssociatedWithContract(ObjectBase):
     testing_responsibility = models.CharField(max_length=50, blank=True, null=True)
     management_price_per_unit_quantity = models.FloatField(blank=True, null=True)
     total_batch_management_price = models.FloatField(blank=True, null=True)
-    currency =  models.CharField(max_length=50, choices=CURRENCY_UNIT_CHOICES, default=CURRENCY_UNIT_CHOICES[0][0])
+    currency = models.CharField(max_length=50, choices=CURRENCY_UNIT_CHOICES, default=CURRENCY_UNIT_CHOICES[0][0])
 
 
 # &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& Waste Acceptance &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
@@ -934,13 +962,17 @@ class WasteBatchTreatment(ObjectBase):
     related_waste_SUB_batch = models.ForeignKey(WasteSubBatch, null=True, blank=True, on_delete=models.SET_NULL)
     date_waste_entered_treatment_facility = models.DateField()
     waste_quantity_entering_treatment_facility = models.FloatField()
-    waste_quantity_unit =models.CharField(max_length=50, choices=QUANTITY_UNIT_CHOICES, default=QUANTITY_UNIT_CHOICES[0][0])
+    waste_quantity_unit = models.CharField(max_length=50, choices=QUANTITY_UNIT_CHOICES,
+                                           default=QUANTITY_UNIT_CHOICES[0][0])
     treatment_type = models.ForeignKey(WasteTreatmentMethod, null=True, blank=True, on_delete=models.SET_NULL)
-    treatment_material_type = models.ForeignKey(WasteTreatmentMaterial, null=True, blank=True, on_delete=models.SET_NULL)
+    treatment_material_type = models.ForeignKey(WasteTreatmentMaterial, null=True, blank=True,
+                                                on_delete=models.SET_NULL)
     treatment_material_quantity_used = models.FloatField()
-    treatment_material_quantity_unit = models.CharField(max_length=50, choices=QUANTITY_UNIT_CHOICES, default=QUANTITY_UNIT_CHOICES[0][0])
+    treatment_material_quantity_unit = models.CharField(max_length=50, choices=QUANTITY_UNIT_CHOICES,
+                                                        default=QUANTITY_UNIT_CHOICES[0][0])
     water_quantity_used = models.FloatField(null=True, blank=True)
-    water_quantity_unit = models.CharField(max_length=50, choices=QUANTITY_UNIT_CHOICES, default=QUANTITY_UNIT_CHOICES[0][0])
+    water_quantity_unit = models.CharField(max_length=50, choices=QUANTITY_UNIT_CHOICES,
+                                           default=QUANTITY_UNIT_CHOICES[0][0])
     is_leaching_test_required = models.BooleanField()
     leaching_test_document = models.ForeignKey(DocumentFile, on_delete=models.SET_NULL, blank=True, null=True)
     is_leaching_test_results_compliant = models.BooleanField()
@@ -964,7 +996,8 @@ class WasteBatchTCLPTestResult(ObjectBase):
     sampling_date = models.DateField()
     test_date = models.DateField()
     lab = models.ForeignKey(Lab, blank=True, null=True, on_delete=models.SET_NULL)
-    analysis_preparation_method = models.ForeignKey(WasteAnalysisPreparationMethod, on_delete=models.SET_NULL, blank=True, null=True)
+    analysis_preparation_method = models.ForeignKey(WasteAnalysisPreparationMethod, on_delete=models.SET_NULL,
+                                                    blank=True, null=True)
     analysis_result = models.ManyToManyField(LabAnalysisResult)
     test_document = models.ForeignKey(DocumentFile, null=True, blank=True, on_delete=models.SET_NULL)
     comments = models.TextField(blank=True, null=True)
@@ -1008,11 +1041,13 @@ SATISFACTION_LEVEL_CHOICES = (
     ("high", "high"),
 )
 
+
 class CustomerOfClientEvaluation(models.Model):
     id_code = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    date= models.DateField(auto_now_add=True)
+    date = models.DateField(auto_now_add=True)
     CustomerOfClient = models.ForeignKey(AssociateOfClient, on_delete=models.CASCADE)
-    satisfaction_level = models.CharField(max_length=50, choices=SATISFACTION_LEVEL_CHOICES, default=SATISFACTION_LEVEL_CHOICES[0][0])
+    satisfaction_level = models.CharField(max_length=50, choices=SATISFACTION_LEVEL_CHOICES,
+                                          default=SATISFACTION_LEVEL_CHOICES[0][0])
     comment = models.TextField(blank=True, null=True)
 
 
@@ -1024,6 +1059,7 @@ class HSEAccidentType(models.Model):
 
     def __str__(self):
         return self.ref
+
 
 HSEAccident_SEVERITY_CHOICES = (
     ("low", "low"),
@@ -1037,5 +1073,6 @@ class HSEAccidentReport(ObjectBase):
     type = models.ForeignKey(HSEAccidentType, on_delete=models.SET_NULL, blank=True, null=True)
     location = models.CharField(max_length=50)
     description = models.TextField()
-    severity = models.CharField(max_length=50, choices=HSEAccident_SEVERITY_CHOICES, default=HSEAccident_SEVERITY_CHOICES[0][0])
+    severity = models.CharField(max_length=50, choices=HSEAccident_SEVERITY_CHOICES,
+                                default=HSEAccident_SEVERITY_CHOICES[0][0])
     employees_involved = models.TextField(blank=True, null=True)

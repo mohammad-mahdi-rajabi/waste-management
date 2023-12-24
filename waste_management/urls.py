@@ -88,7 +88,7 @@ urlpatterns = [
     path('user-position/<str:id_code>/', ViewUpdateDeleteUserPosition.as_view(), name='view-update-delete-user-position'),
     path('user-position/', CreateUserPosition.as_view(), name='create-user-position'),
     path('list-user-positions/<str:client__id_code>/', ListUserPositions.as_view(), name='list-user-positions'),
-    path('user-position-by-username/<str:user__username)/', ViewUserPosition.as_view(), name='view-user-position-by-username'),
+    path('user-position-by-username/<str:user__username>/', ViewUserPosition.as_view(), name='view-user-position-by-username'),
 
     path('list-form-groups/', FormGroupListView.as_view(), name='list-form-groups'),
     path('form-groups/create/', CreateFormGroupView.as_view(), name='create-form-group'),

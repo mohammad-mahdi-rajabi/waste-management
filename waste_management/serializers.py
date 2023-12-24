@@ -9,19 +9,20 @@ from .models import (
     ContentText, ContentImage, ContactUs, CalendarEvent,
 
     VehicleType, VehicleInfo, AssociateType, ContractType, WasteStorageType, WasteAnalysisParameter,
-    WasteAnalysisPreparationStandard,  WasteAnalysisStandard, WasteAnalysisMethod, LabAnalysisResult,
+    WasteAnalysisPreparationStandard, WasteAnalysisStandard, WasteAnalysisMethod, LabAnalysisResult,
     WasteTreatmentMaterial, WasteTreatmentEquipment, WasteTreatmentMethod,
     AssociateOfClient, Contract, Payment, WasteClassificationSystem, WasteClass, WasteType, WastePickupRequest,
     WasteExpressedCharacteristic, WasteBatch, WasteSubBatch, WasteBatchInitialEvaluation, WasteBatchSecondaryEvaluation,
-    WasteAssessment, WasteSample, WasteBatchCostManHour, WasteBatchCostEquipment, WasteBatchCostMaterial,  WasteBatchCostEstimation,
+    WasteAssessment, WasteSample, WasteBatchCostManHour, WasteBatchCostEquipment, WasteBatchCostMaterial,
+    WasteBatchCostEstimation,
     WasteAssociatedWithContract, WasteBatchAcceptanceAtOrigin, WasteBatchAcceptanceAtDestination,
-    WasteBatchStorageEnter, WasteBatchStorageExit, WasteBatchTreatment, Lab, WasteBatchTCLPTestResult, WasteBatchLandfilling, LandfillDailyReport,
+    WasteBatchStorageEnter, WasteBatchStorageExit, WasteBatchTreatment, Lab, WasteBatchTCLPTestResult,
+    WasteBatchLandfilling, LandfillDailyReport,
     CustomerOfClientEvaluation, WasteAnalysisPreparationMethod, HSEAccidentType, HSEAccidentReport,
 )
 
 
 class UserMinimalSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = User
         fields = ('username', 'first_name', 'last_name')
@@ -69,7 +70,6 @@ class ContactSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-
 # &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& Client &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
 class MembershipTypeSerializer(serializers.ModelSerializer):
     class Meta:
@@ -104,12 +104,12 @@ class ClientSummarySerializer(serializers.ModelSerializer):
         fields = ('id_code', 'name', 'logo')
         read_only_fields = ('id_code', 'name', 'logo')
 
+
 # &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& Language and Calendar &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
 class LanguageSerializer(serializers.ModelSerializer):
     class Meta:
         model = Language
         fields = '__all__'
-
 
 
 class CalendarSerializer(serializers.ModelSerializer):
@@ -137,7 +137,9 @@ class UserDetailSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ('username', 'first_name', 'last_name', 'date_joined', 'client', 'email', 'phone_number', 'profile_image', 'signature_image', 'selected_language', 'selected_calender')
+        fields = (
+        'username', 'first_name', 'last_name', 'date_joined', 'client', 'email', 'phone_number', 'profile_image',
+        'signature_image', 'selected_language', 'selected_calender')
         read_only_fields = ('username', 'date_joined', 'client', 'email', 'first_name', 'last_name', 'username')
 
 
@@ -205,17 +207,14 @@ class UserPositionSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-
 # &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& User Files &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
 class DocumentFileSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = DocumentFile
         fields = '__all__'
 
 
 class ImageFileSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = ImageFile
         fields = '__all__'
@@ -228,9 +227,8 @@ class FormGroupSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-
 class FormSerializer(serializers.ModelSerializer):
-    #group = FormGroupSerializer()
+    # group = FormGroupSerializer()
     group = serializers.PrimaryKeyRelatedField(queryset=FormGroup.objects.all())
 
     class Meta:
@@ -238,20 +236,18 @@ class FormSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-
 class SectionSerializer(serializers.ModelSerializer):
     form = serializers.PrimaryKeyRelatedField(queryset=Form.objects.all())
+
     class Meta:
         model = Section
         fields = '__all__'
 
 
 class StaticChoiceSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = StaticChoice
         fields = '__all__'
-
 
 
 class StaticChoiceOptionSerializer(serializers.ModelSerializer):
@@ -260,7 +256,6 @@ class StaticChoiceOptionSerializer(serializers.ModelSerializer):
     class Meta:
         model = StaticChoiceOption
         fields = '__all__'
-
 
 
 class FieldSerializer(serializers.ModelSerializer):
@@ -274,7 +269,6 @@ class FieldSerializer(serializers.ModelSerializer):
     class Meta:
         model = Field
         fields = '__all__'
-
 
 
 # &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& Content &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
@@ -304,11 +298,10 @@ class CalendarEventSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-
 # &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& Vehicles &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
 class VehicleTypeSerializer(serializers.ModelSerializer):
     class Meta:
-        model =  VehicleType
+        model = VehicleType
         fields = ('name',)
         read_only_fields = ('name',)
 
@@ -317,35 +310,35 @@ class VehicleInfoSerializer(serializers.ModelSerializer):
     vehicle_type = VehicleTypeSerializer()
 
     class Meta:
-        model =  VehicleInfo
+        model = VehicleInfo
         fields = '__all__'
 
 
 # &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& Various Types &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
 class AssociateTypeSerializer(serializers.ModelSerializer):
     class Meta:
-        model =  AssociateType
+        model = AssociateType
         fields = ('ref', 'name',)
         read_only_fields = ('ref', 'name',)
 
 
 class ContractTypeSerializer(serializers.ModelSerializer):
     class Meta:
-        model =  ContractType
+        model = ContractType
         fields = ('ref', 'name',)
         read_only_fields = ('ref', 'name',)
 
 
 class WasteStorageTypeSerializer(serializers.ModelSerializer):
     class Meta:
-        model =  WasteStorageType
+        model = WasteStorageType
         fields = ('name', 'description')
         read_only_fields = ('name', 'description')
 
 
 class WasteAnalysisParameterSerializer(serializers.ModelSerializer):
     class Meta:
-        model =  WasteAnalysisParameter
+        model = WasteAnalysisParameter
         fields = ('ref', 'name', 'description')
         read_only_fields = ('ref', 'name', 'description')
 
@@ -354,7 +347,7 @@ class WasteAnalysisPreparationStandardSerializer(serializers.ModelSerializer):
     related_document = DocumentFileSerializer()
 
     class Meta:
-        model =  WasteAnalysisPreparationStandard
+        model = WasteAnalysisPreparationStandard
         fields = ('ref', 'name', 'description', 'reference', 'related_document')
         read_only_fields = ('ref', 'name', 'description', 'reference', 'related_document')
 
@@ -363,17 +356,16 @@ class WasteAnalysisPreparationMethodSerializer(serializers.ModelSerializer):
     related_document = DocumentFileSerializer()
 
     class Meta:
-        model =  WasteAnalysisPreparationMethod
+        model = WasteAnalysisPreparationMethod
         fields = ('ref', 'name', 'description', 'reference', 'related_document')
         read_only_fields = ('ref', 'name', 'description', 'reference', 'related_document')
-
 
 
 class WasteAnalysisStandardSerializer(serializers.ModelSerializer):
     related_document = DocumentFileSerializer()
 
     class Meta:
-        model =  WasteAnalysisStandard
+        model = WasteAnalysisStandard
         fields = ('ref', 'name', 'description', 'reference', 'related_document')
         read_only_fields = ('ref', 'name', 'description', 'reference', 'related_document')
 
@@ -382,7 +374,7 @@ class WasteAnalysisMethodSerializer(serializers.ModelSerializer):
     related_document = DocumentFileSerializer()
 
     class Meta:
-        model =  WasteAnalysisMethod
+        model = WasteAnalysisMethod
         fields = ('ref', 'name', 'description', 'reference', 'related_document')
         read_only_fields = ('ref', 'name', 'description', 'reference', 'related_document')
 
@@ -393,20 +385,20 @@ class LabAnalysisResultSerializer(serializers.ModelSerializer):
     analysis_standard = WasteAnalysisStandardSerializer()
 
     class Meta:
-        model =  LabAnalysisResult
+        model = LabAnalysisResult
         fields = '__all__'
 
 
 class WasteTreatmentMaterialSerializer(serializers.ModelSerializer):
     class Meta:
-        model =  WasteTreatmentMaterial
+        model = WasteTreatmentMaterial
         fields = ('ref', 'name', 'description')
         read_only_fields = ('ref', 'name', 'description')
 
 
 class WasteTreatmentEquipmentSerializer(serializers.ModelSerializer):
     class Meta:
-        model =  WasteTreatmentEquipment
+        model = WasteTreatmentEquipment
         fields = ('ref', 'name', 'description')
         read_only_fields = ('ref', 'name', 'description')
 
@@ -417,9 +409,10 @@ class WasteTreatmentMethodSerializer(serializers.ModelSerializer):
     related_document = DocumentFileSerializer()
 
     class Meta:
-        model =  WasteTreatmentMethod
+        model = WasteTreatmentMethod
         fields = '__all__'
         read_only_fields = ('ref',)
+
 
 ####################################################################
 class AssociateOfClientDetailSerializer(serializers.ModelSerializer):
@@ -429,16 +422,15 @@ class AssociateOfClientDetailSerializer(serializers.ModelSerializer):
     contact = ContactSerializer()
 
     class Meta:
-        model =  AssociateOfClient
+        model = AssociateOfClient
         fields = '__all__'
 
 
 class AssociateOfClientSummarySerializer(serializers.ModelSerializer):
-
     class Meta:
-        model =  AssociateOfClient
-        fields = ('name', )
-        read_only_fields = ('name', )
+        model = AssociateOfClient
+        fields = ('name',)
+        read_only_fields = ('name',)
 
 
 class ContractDetailSerializer(serializers.ModelSerializer):
@@ -447,96 +439,93 @@ class ContractDetailSerializer(serializers.ModelSerializer):
     attachment = DocumentFileSerializer()
 
     class Meta:
-        model =  Contract
-        fields = ('associate', 'type_of_contract', 'reference_code', 'title', 'duration_in_days', 'date_of_signing', 'agreed_start_date', 'agreed_end_date',
-        'total_price', 'AP_guarantee', 'performance_bond', 'has_performance_guarantee', 'currency', 'job_description','notes', 'attachment')
+        model = Contract
+        fields = ('associate', 'type_of_contract', 'reference_code', 'title', 'duration_in_days', 'date_of_signing',
+                  'agreed_start_date', 'agreed_end_date',
+                  'total_price', 'AP_guarantee', 'performance_bond', 'has_performance_guarantee', 'currency',
+                  'job_description', 'notes', 'attachment')
 
 
 class ContractCommencementSerializer(serializers.ModelSerializer):
-
     class Meta:
-        model =  Contract
+        model = Contract
         fields = ('title', 'commencement_date')
-        read_only_fields = ('title', )
+        read_only_fields = ('title',)
 
 
 class ContractTerminationSerializer(serializers.ModelSerializer):
-
     class Meta:
-        model =  Contract
+        model = Contract
         fields = ('title', 'actual_end_date')
-        read_only_fields = ('title', )
+        read_only_fields = ('title',)
 
 
 class ContractSummarySerializer(serializers.ModelSerializer):
     class Meta:
-        model =  Contract
-        fields = ('title', )
+        model = Contract
+        fields = ('title',)
 
 
 class PaymentInstallmentSerializer(serializers.ModelSerializer):
-    contract  = ContractSummarySerializer()
+    contract = ContractSummarySerializer()
 
     class Meta:
-        model =  Payment
+        model = Payment
         fields = ('contract', 'amount', 'currency', 'due_date')
 
 
-
 class PaymentRecievedSerializer(serializers.ModelSerializer):
-    contract  = ContractSummarySerializer()
+    contract = ContractSummarySerializer()
 
     class Meta:
-        model =  Payment
+        model = Payment
         fields = ('contract', 'due_date', 'date_paid', 'reference_number', 'comments')
         read_only_fields = ('contract', 'due_date')
 
 
-
 class PaymentSummarySerializer(serializers.ModelSerializer):
-    contract  = ContractSummarySerializer()
+    contract = ContractSummarySerializer()
 
     class Meta:
-        model =  Payment
+        model = Payment
         fields = ('contract', 'amount', 'currency', 'due_date', 'date_paid')
         read_only_fields = ('contract', 'amount', 'currency', 'due_date', 'date_paid')
 
 
-
 class WasteClassificationSystemSerializer(serializers.ModelSerializer):
     class Meta:
-        model =  WasteClassificationSystem
+        model = WasteClassificationSystem
         fields = ('name', 'description')
         read_only_fields = ('name', 'description')
 
 
 class WasteClassSerializer(serializers.ModelSerializer):
-    classification_system  = WasteClassificationSystemSerializer()
+    classification_system = WasteClassificationSystemSerializer()
 
     class Meta:
-        model =  WasteClass
+        model = WasteClass
         fields = ('classification_system', 'class_name', 'description')
 
 
 class WasteTypeSerializer(serializers.ModelSerializer):
-    waste_class  = WasteClassSerializer()
+    waste_class = WasteClassSerializer()
 
     class Meta:
-        model =  WasteType
-        fields =  '__all__'
+        model = WasteType
+        fields = '__all__'
 
 
 class WastePickupRequestSerializer(serializers.ModelSerializer):
-    contact  = ContactSerializer()
-    pickup_location  = LocationSerializer()
+    contact = ContactSerializer()
+    pickup_location = LocationSerializer()
 
     class Meta:
-        model =  WastePickupRequest
-        fields =  '__all__'
+        model = WastePickupRequest
+        fields = '__all__'
 
 
 class WasteExpressedCharacteristicSerializer(serializers.ModelSerializer):
-    related_pickup_request  = WastePickupRequestSerializer()
+    related_pickup_request = WastePickupRequestSerializer()
     storage_type = WasteStorageTypeSerializer()
     waste_class = WasteClassSerializer()
     MSDS_document = DocumentFileSerializer()
@@ -547,41 +536,39 @@ class WasteExpressedCharacteristicSerializer(serializers.ModelSerializer):
     other_documents = DocumentFileSerializer()
 
     class Meta:
-        model =  WasteExpressedCharacteristic
-        fields =  '__all__'
+        model = WasteExpressedCharacteristic
+        fields = '__all__'
 
 
 class WasteBatchSerializer(serializers.ModelSerializer):
     customer = AssociateOfClientSummarySerializer()
-    contract  = ContractSummarySerializer()
+    contract = ContractSummarySerializer()
     related_WasteExpressedCharacteristic = WasteExpressedCharacteristicSerializer()
     waste_class = WasteClassSerializer()
 
     class Meta:
-        model =  WasteBatch
-        fields =  '__all__'
+        model = WasteBatch
+        fields = '__all__'
 
 
 class WasteBatchSummarySerializer(serializers.ModelSerializer):
-
     class Meta:
-        model =  WasteBatch
-        fields =  ('assigned_waste_reference_code', )
+        model = WasteBatch
+        fields = ('assigned_waste_reference_code',)
 
 
 class WasteSubBatchSerializer(serializers.ModelSerializer):
     related_waste_batch = WasteBatchSerializer()
 
     class Meta:
-        model =  WasteSubBatch
-        fields =  '__all__'
+        model = WasteSubBatch
+        fields = '__all__'
 
 
 class WasteSubBatchSummarySerializer(serializers.ModelSerializer):
-
     class Meta:
-        model =  WasteSubBatch
-        fields =  ('assigned_waste_reference_code', )
+        model = WasteSubBatch
+        fields = ('assigned_waste_reference_code',)
 
 
 class WasteBatchInitialEvaluationSerializer(serializers.ModelSerializer):
@@ -590,8 +577,8 @@ class WasteBatchInitialEvaluationSerializer(serializers.ModelSerializer):
     recommended_assessor = UserSummarySerializer()
 
     class Meta:
-        model =  WasteBatchInitialEvaluation
-        fields =  '__all__'
+        model = WasteBatchInitialEvaluation
+        fields = '__all__'
 
 
 class WasteBatchSecondaryEvaluationSerializer(serializers.ModelSerializer):
@@ -601,13 +588,13 @@ class WasteBatchSecondaryEvaluationSerializer(serializers.ModelSerializer):
     documents = DocumentFileSerializer()
 
     class Meta:
-        model =  WasteBatchSecondaryEvaluation
-        fields =  '__all__'
+        model = WasteBatchSecondaryEvaluation
+        fields = '__all__'
 
 
 class WasteAssessmentSerializer(serializers.ModelSerializer):
     customer = AssociateOfClientSummarySerializer()
-    contract  = ContractSummarySerializer()
+    contract = ContractSummarySerializer()
     related_waste_batch = WasteBatchSerializer()
     related_waste_SUB_batch = WasteSubBatchSerializer()
     waste_class = WasteClassSerializer()
@@ -616,34 +603,34 @@ class WasteAssessmentSerializer(serializers.ModelSerializer):
     related_miscellaneous_documents = DocumentFileSerializer()
 
     class Meta:
-        model =  WasteAssessment
-        fields =  '__all__'
+        model = WasteAssessment
+        fields = '__all__'
 
 
 class WasteSampleSerializer(serializers.ModelSerializer):
     related_waste_assessment = WasteAssessmentSerializer()
 
     class Meta:
-        model =  WasteSample
-        fields =  '__all__'
+        model = WasteSample
+        fields = '__all__'
 
 
 class WasteBatchCostManHourSerializer(serializers.ModelSerializer):
     class Meta:
-        model =  WasteBatchCostManHour
-        fields =  '__all__'
+        model = WasteBatchCostManHour
+        fields = '__all__'
 
 
 class WasteBatchCostEquipmentSerializer(serializers.ModelSerializer):
     class Meta:
-        model =  WasteBatchCostEquipment
-        fields =  '__all__'
+        model = WasteBatchCostEquipment
+        fields = '__all__'
 
 
 class WasteBatchCostMaterialSerializer(serializers.ModelSerializer):
     class Meta:
-        model =  WasteBatchCostMaterial
-        fields =  '__all__'
+        model = WasteBatchCostMaterial
+        fields = '__all__'
 
 
 class WasteBatchCostEstimationSerializer(serializers.ModelSerializer):
@@ -654,9 +641,8 @@ class WasteBatchCostEstimationSerializer(serializers.ModelSerializer):
     materials = WasteBatchCostMaterialSerializer()
 
     class Meta:
-        model =  WasteBatchCostEstimation
-        fields =  '__all__'
-
+        model = WasteBatchCostEstimation
+        fields = '__all__'
 
 
 class WasteAssociatedWithContractSerializer(serializers.ModelSerializer):
@@ -664,8 +650,8 @@ class WasteAssociatedWithContractSerializer(serializers.ModelSerializer):
     related_waste_SUB_batch = WasteSubBatchSerializer()
 
     class Meta:
-        model =  WasteAssociatedWithContract
-        fields =  '__all__'
+        model = WasteAssociatedWithContract
+        fields = '__all__'
 
 
 class WasteBatchAcceptanceAtOriginSerializer(serializers.ModelSerializer):
@@ -676,8 +662,8 @@ class WasteBatchAcceptanceAtOriginSerializer(serializers.ModelSerializer):
     documents = DocumentFileSerializer()
 
     class Meta:
-        model =  WasteBatchAcceptanceAtOrigin
-        fields =  '__all__'
+        model = WasteBatchAcceptanceAtOrigin
+        fields = '__all__'
 
 
 class WasteBatchAcceptanceAtDestinationSerializer(serializers.ModelSerializer):
@@ -689,8 +675,8 @@ class WasteBatchAcceptanceAtDestinationSerializer(serializers.ModelSerializer):
     scale_print_document = DocumentFileSerializer()
 
     class Meta:
-        model =  WasteBatchAcceptanceAtDestination
-        fields =  '__all__'
+        model = WasteBatchAcceptanceAtDestination
+        fields = '__all__'
 
 
 class WasteBatchStorageEnterSerializer(serializers.ModelSerializer):
@@ -701,8 +687,8 @@ class WasteBatchStorageEnterSerializer(serializers.ModelSerializer):
     documents = DocumentFileSerializer()
 
     class Meta:
-        model =  WasteBatchStorageEnter
-        fields =  '__all__'
+        model = WasteBatchStorageEnter
+        fields = '__all__'
 
 
 class WasteBatchStorageExitSerializer(serializers.ModelSerializer):
@@ -713,8 +699,8 @@ class WasteBatchStorageExitSerializer(serializers.ModelSerializer):
     documents = DocumentFileSerializer()
 
     class Meta:
-        model =  WasteBatchStorageExit
-        fields =  '__all__'
+        model = WasteBatchStorageExit
+        fields = '__all__'
 
 
 class WasteBatchTreatmentSerializer(serializers.ModelSerializer):
@@ -726,8 +712,8 @@ class WasteBatchTreatmentSerializer(serializers.ModelSerializer):
     documents = DocumentFileSerializer()
 
     class Meta:
-        model =  WasteBatchTreatment
-        fields =  '__all__'
+        model = WasteBatchTreatment
+        fields = '__all__'
 
 
 class LabSerializer(serializers.ModelSerializer):
@@ -735,14 +721,14 @@ class LabSerializer(serializers.ModelSerializer):
     contact = ContactSerializer()
 
     class Meta:
-        model =  Lab
-        fields =  '__all__'
+        model = Lab
+        fields = '__all__'
 
 
 class LabSummarySerializer(serializers.ModelSerializer):
     class Meta:
-        model =  Lab
-        fields =  ('name',)
+        model = Lab
+        fields = ('name',)
 
 
 class WasteBatchTCLPTestResultSerializer(serializers.ModelSerializer):
@@ -755,8 +741,8 @@ class WasteBatchTCLPTestResultSerializer(serializers.ModelSerializer):
     documents = DocumentFileSerializer()
 
     class Meta:
-        model =  WasteBatchTCLPTestResult
-        fields =  '__all__'
+        model = WasteBatchTCLPTestResult
+        fields = '__all__'
 
 
 class WasteBatchLandfillingSerializer(serializers.ModelSerializer):
@@ -764,14 +750,13 @@ class WasteBatchLandfillingSerializer(serializers.ModelSerializer):
     related_waste_SUB_batch = WasteSubBatchSerializer()
 
     class Meta:
-        model =  WasteBatchLandfilling
-        fields =  '__all__'
+        model = WasteBatchLandfilling
+        fields = '__all__'
 
 
 class LandfillDailyReportSerializer(serializers.ModelSerializer):
-
     class Meta:
-        model =  LandfillDailyReport
+        model = LandfillDailyReport
         fields = '__all__'
 
 
@@ -779,14 +764,14 @@ class CustomerOfClientEvaluationSerializer(serializers.ModelSerializer):
     CustomerOfClient = AssociateOfClientSummarySerializer()
 
     class Meta:
-        model =  CustomerOfClientEvaluation
-        fields =  '__all__'
+        model = CustomerOfClientEvaluation
+        fields = '__all__'
 
 
 # &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& HSE &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
 class HSEAccidentTypeSerializer(serializers.ModelSerializer):
     class Meta:
-        model =  HSEAccidentType
+        model = HSEAccidentType
         fields = ('name', 'description')
         read_only_fields = ('name', 'description')
 
@@ -795,5 +780,5 @@ class HSEAccidentReportSerializer(serializers.ModelSerializer):
     type = HSEAccidentTypeSerializer()
 
     class Meta:
-        model =  HSEAccidentReport
-        fields =  '__all__'
+        model = HSEAccidentReport
+        fields = '__all__'
