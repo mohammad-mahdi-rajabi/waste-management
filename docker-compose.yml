@@ -4,9 +4,9 @@ services:
 
   wst-mng:
     build: .
-#    command: gunicorn core.wsgi:application --bind 0.0.0.0:8000
+#    command: gunicorn core.wsgi:application --bind 0.0.0.0:8080
     expose:
-      - "8000"
+      - "8080"
     depends_on:
           - postgres
   postgres:
