@@ -1,5 +1,5 @@
 # Use an official Python runtime as a parent image
-FROM python:3.9-alpine
+FROM python:3.9-slim-buster
 
 
 RUN apt-get update \
@@ -7,6 +7,7 @@ RUN apt-get update \
         postgresql-client net-tools telnet curl libpq-dev python-dev build-essential\
     && rm -rf /var/lib/apt/lists/*
 RUN pip install --upgrade pip
+
 # Set the working directory to /app
 WORKDIR /waste-management
 
