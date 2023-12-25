@@ -5,7 +5,7 @@ import os
 from django.utils.translation import gettext_lazy as _
 import uuid
 from django.utils import timezone
-import magic
+# import magic
 
 QUANTITY_UNIT_CHOICES = (
     ("Kg", "kg"),
@@ -51,11 +51,11 @@ def validate_file_size(fieldfile_obj):
 
 def validate_image_file_content(file):
     valid_mime_types = ['image/jpeg', 'image/png', 'image/gif', 'image/tiff', 'application/postscript', 'image/svg+xml']
-    file_mime_type = magic.from_buffer(file.read(1024), mime=True)
-    if file_mime_type not in valid_mime_types:
-        raise ValidationError(
-            _('Unsupported file type. Only JPEG, PNG, GIF, TIFF, EPS, and SVG images are allowed.')
-        )
+    # file_mime_type = magic.from_buffer(file.read(1024), mime=True)
+    # if file_mime_type not in valid_mime_types:
+    #     raise ValidationError(
+    #         _('Unsupported file type. Only JPEG, PNG, GIF, TIFF, EPS, and SVG images are allowed.')
+    #     )
 
 
 def validate_document_file_content(file):
@@ -65,11 +65,11 @@ def validate_document_file_content(file):
                         'application/vnd.ms-powerpoint',
                         'application/vnd.openxmlformats-officedocument.presentationml.presentation', 'application/zip',
                         'application/x-rar']
-    file_mime_type = magic.from_buffer(file.read(1024), mime=True)
-    if file_mime_type not in valid_mime_types:
-        raise ValidationError(
-            _('Unsupported file type. Only PDF, Word, Excel, PowerPoint, and ZIP files are allowed.')
-        )
+    # file_mime_type = magic.from_buffer(file.read(1024), mime=True)
+    # if file_mime_type not in valid_mime_types:
+    #     raise ValidationError(
+    #         _('Unsupported file type. Only PDF, Word, Excel, PowerPoint, and ZIP files are allowed.')
+    #     )
 
 
 def validate_image_file_extension(file):
