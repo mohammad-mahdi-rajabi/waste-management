@@ -24,4 +24,4 @@ EXPOSE 8000
 
 # Set environment variables for PostgreSQL connection
 # Run migrations and start web server
-CMD ["sh", "-c", "python manage.py migrate && python manage.py runserver 0.0.0.0:80"]
+CMD ["sh", "-c", "python manage.py migrate && python manage.py runserver 0.0.0.0:8000"]
