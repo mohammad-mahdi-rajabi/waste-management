@@ -9,12 +9,10 @@ from django.utils import timezone
 
 QUANTITY_UNIT_CHOICES = (
     ("Kg", "kg"),
-
 )
 
 CURRENCY_UNIT_CHOICES = (
     ("Rial", "Rial"),
-
 )
 
 DENSITY_UNIT_CHOICES = (
